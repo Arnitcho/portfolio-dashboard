@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0906;
+  --gold: #c9a84c;
+  --gold-dim: #8a6e2a;
+  --cream: #f0ece0;
+  --cream-dim: #a09880;
+  --surface: #100f0c;
+  --surface-2: #181510;
+  --border: rgba(201, 168, 76, 0.2);
+  --border-strong: rgba(201, 168, 76, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  background-color: #0a0906;
+  color: #f0ece0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0906;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(201, 168, 76, 0.3);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 168, 76, 0.5);
+}
+
+/* Typography */
+.font-garamond { font-family: 'Cormorant Garamond', serif; }
+.font-mono-dm { font-family: 'DM Mono', monospace; }
+.font-sans-dm { font-family: 'DM Sans', sans-serif; }
+
+/* Gold line separator */
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.6), transparent);
+}
+
+/* Verdict badges */
+.badge-buy {
+  background: rgba(52, 211, 153, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+.badge-watch {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+.badge-watchlist {
+  background: rgba(160, 152, 128, 0.1);
+  color: #a09880;
+  border: 1px solid rgba(160, 152, 128, 0.3);
+}
+
+/* Filter status dots */
+.dot-pass { background-color: #34d399; }
+.dot-warn { background-color: #fbbf24; }
+.dot-fail { background-color: #ef4444; }
+
+/* Card surface */
+.card {
+  background: #100f0c;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+/* Input styling */
+input[type="number"], input[type="text"] {
+  background: transparent;
+  color: #f0ece0;
+  border: none;
+  outline: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  width: 100%;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+/* Range slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2px;
+  background: rgba(201, 168, 76, 0.2);
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #c9a84c;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #c9a84c;
+  cursor: pointer;
+  border: none;
+}
+
+/* Table rows */
+.table-row-hover:hover {
+  background: rgba(201, 168, 76, 0.04);
+  cursor: pointer;
+}
+
+/* Animated underline on nav */
+.nav-active::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background: #c9a84c;
+  margin-top: 2px;
+}
+
+/* Upside colors */
+.upside-deep-green { color: #34d399; }
+.upside-green { color: #6ee7b7; }
+.upside-light-green { color: #a7f3d0; }
+.upside-amber { color: #fbbf24; }
+.upside-orange { color: #f97316; }
+.upside-red { color: #f87171; }
+.upside-deep-red { color: #ef4444; }
+
+/* Status live indicator */
+.status-live { color: #34d399; }
+.status-cached { color: #fbbf24; }
+.status-error { color: #ef4444; }
+
+/* Cycle nature badges */
+.badge-secular {
+  background: rgba(139, 92, 246, 0.1);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+.badge-cyclical {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+.badge-structural {
+  background: rgba(59, 130, 246, 0.1);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Analytical stop — red box */
+.stop-box {
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}

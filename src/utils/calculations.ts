@@ -1,7 +1,11 @@
+// Legacy single-method FCF target (kept for backward compat)
 export function calcFCFTarget(fcfPerShare: number, g: number, r = 0.15): number {
   if (r <= g) return 0
   return (fcfPerShare * Math.pow(1 + g, 3)) / (r - g)
 }
+
+// Re-export new valuation engine for convenience
+export { getValuation, getUpsideColorNew } from '../data/valuation'
 
 export function calcUpside(currentPrice: number, targetPrice: number): number {
   if (!currentPrice || currentPrice === 0) return 0

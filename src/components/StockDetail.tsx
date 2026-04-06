@@ -7,7 +7,8 @@ import CatalystCard from './CatalystCard'
 import PositionPanel from './PositionPanel'
 import CyclePanel from './CyclePanel'
 import CompanyLogo from './CompanyLogo'
-import { calcFCFTarget, calcUpside, getUpsideColor, upsideColorMap, getStatusLabel } from '../utils/calculations'
+import { getValuation, getUpsideColorNew } from '../data/valuation'
+import { formatPrice, getStatusLabel } from '../utils/calculations'
 import { usePrices } from '../hooks/usePrices'
 
 interface StockDetailProps {
@@ -19,10 +20,7 @@ const GOLD = '#c9a84c'
 
 function Panel({ title, children, fullWidth = false }: { title: string; children: React.ReactNode; fullWidth?: boolean }) {
   return (
-    <div className="card" style={{
-      padding: '28px 32px',
-      gridColumn: fullWidth ? '1 / -1' : undefined,
-    }}>
+    <div className="card" style={{ padding: '28px 32px', gridColumn: fullWidth ? '1 / -1' : undefined }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
         <h3 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '20px', fontWeight: 400, color: '#f0ece0', letterSpacing: '0.03em', lineHeight: 1 }}>
           {title}
@@ -35,11 +33,152 @@ function Panel({ title, children, fullWidth = false }: { title: string; children
 }
 
 const verdictConfig = {
-  buy:       { label: 'ACHAT',       color: '#34d399', bg: 'rgba(52,211,153,0.1)',   border: 'rgba(52,211,153,0.3)' },
+  buy:       { label: 'ACHAT',        color: '#34d399', bg: 'rgba(52,211,153,0.1)',   border: 'rgba(52,211,153,0.3)' },
   watch:     { label: 'SURVEILLANCE', color: '#fbbf24', bg: 'rgba(251,191,36,0.1)',   border: 'rgba(251,191,36,0.3)' },
-  watchlist: { label: 'WATCHLIST',   color: '#a09880', bg: 'rgba(160,152,128,0.08)', border: 'rgba(160,152,128,0.2)' },
+  watchlist: { label: 'WATCHLIST',    color: '#a09880', bg: 'rgba(160,152,128,0.08)', border: 'rgba(160,152,128,0.2)' },
 }
 
+// ── Valuation panel ──────────────────────────────────────────
+interface ValuationMethodCardProps {
+  label: string
+  price: string
+  color: string
+  bg: string
+  border: string
+  note: string
+}
+
+function ValuationMethodCard({ label, price, color, bg, border, note }: ValuationMethodCardProps) {
+  return (
+    <div style={{ background: bg, border: `1px solid ${border}`, borderRadius: '12px', padding: '20px 24px' }}>
+      <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', letterSpacing: '0.12em', color, marginBottom: '10px' }}>
+        {label}
+      </div>
+      <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '28px', fontWeight: 600, color, lineHeight: 1, marginBottom: '10px' }}>
+        {price}
+      </div>
+      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', color: 'rgba(240,236,224,0.45)', lineHeight: 1.6 }}>
+        {note}
+      </p>
+    </div>
+  )
+}
+
+function ValuationPanel({ stockId, currentPrice, currency }: { stockId: string; currentPrice: number; currency: string }) {
+  const val = getValuation(stockId, currentPrice)
+  const upside = val.upside
+  const upsideColor = getUpsideColorNew(upside)
+  const label = getStatusLabel(upside)
+  const fmt = (n: number) => formatPrice(n, currency)
+
+  // Visual bar: price vs fair value
+  const minV = Math.min(currentPrice, val.fairValue) * 0.85
+  const maxV = Math.max(currentPrice, val.fairValue) * 1.15
+  const range = maxV - minV
+  const pricePct  = range > 0 ? ((currentPrice  - minV) / range) * 100 : 50
+  const targetPct = range > 0 ? ((val.fairValue  - minV) / range) * 100 : 50
+
+  return (
+    <div>
+      {/* 3 method cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px', marginBottom: '28px' }}>
+        <ValuationMethodCard
+          label="MÉTHODE 1 — DCF"
+          price={fmt(val.dcf)}
+          color="#60a5fa"
+          bg="rgba(96,165,250,0.06)"
+          border="rgba(96,165,250,0.2)"
+          note={`Projection FCF ${val.input.years ?? 5}ans + TV. WACC ${((val.input.wacc ?? 0.09) * 100).toFixed(1)}% · TGR ${((val.input.tgr ?? 0.035) * 100).toFixed(1)}%`}
+        />
+        <ValuationMethodCard
+          label="MÉTHODE 2 — EV/MULTIPLE"
+          price={fmt(val.multiple)}
+          color={GOLD}
+          bg="rgba(201,168,76,0.06)"
+          border="rgba(201,168,76,0.2)"
+          note={`Moyenne EV/EBITDA ${val.input.evEbitdaSector ?? '—'}× et EV/FCF ${val.input.evFcfSector ?? '—'}× secteur`}
+        />
+        <ValuationMethodCard
+          label="MÉTHODE 3 — RI / EVA"
+          price={fmt(val.residualIncome)}
+          color="#c084fc"
+          bg="rgba(192,132,252,0.06)"
+          border="rgba(192,132,252,0.2)"
+          note={`Book value/sh + Σ EVA actualisé + terminal RI. WACC ${((val.input.wacc ?? 0.09) * 100).toFixed(1)}%`}
+        />
+      </div>
+
+      {/* Fair value summary */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        background: `${upsideColor}08`, border: `1px solid ${upsideColor}25`,
+        borderRadius: '12px', padding: '20px 24px', marginBottom: '24px',
+      }}>
+        <div>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.4)', letterSpacing: '0.12em', marginBottom: '6px' }}>
+            JUSTE VALEUR (MOYENNE 3 MÉTHODES)
+          </div>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '40px', fontWeight: 600, color: '#f0ece0', lineHeight: 1 }}>
+            {fmt(val.fairValue)}
+          </div>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.4)', letterSpacing: '0.12em', marginBottom: '6px' }}>
+            UPSIDE vs PRIX ACTUEL
+          </div>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '48px', fontWeight: 700, color: upsideColor, lineHeight: 1, letterSpacing: '-0.02em' }}>
+            {upside >= 0 ? '+' : ''}{upside.toFixed(1)}%
+          </div>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: upsideColor, opacity: 0.75, marginTop: '4px', letterSpacing: '0.1em' }}>
+            {label}
+          </div>
+        </div>
+      </div>
+
+      {/* Visual price vs fair value bar */}
+      <div style={{ marginBottom: '4px' }}>
+        <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.3)', letterSpacing: '0.1em', marginBottom: '10px' }}>
+          PRIX ACTUEL vs JUSTE VALEUR
+        </div>
+        <div style={{ position: 'relative', height: '6px', background: 'rgba(240,236,224,0.08)', borderRadius: '3px' }}>
+          {/* Range fill between price and fair value */}
+          <div style={{
+            position: 'absolute',
+            left: `${Math.min(pricePct, targetPct)}%`,
+            width: `${Math.abs(targetPct - pricePct)}%`,
+            height: '100%',
+            background: `${upsideColor}30`,
+            borderRadius: '3px',
+          }} />
+          {/* Current price marker */}
+          <div style={{
+            position: 'absolute', left: `${pricePct}%`, top: '-3px',
+            width: '12px', height: '12px', borderRadius: '50%',
+            background: '#f0ece0', border: '2px solid rgba(240,236,224,0.5)',
+            transform: 'translateX(-50%)',
+          }} />
+          {/* Fair value marker */}
+          <div style={{
+            position: 'absolute', left: `${targetPct}%`, top: '-3px',
+            width: '12px', height: '12px', borderRadius: '50%',
+            background: upsideColor, border: `2px solid ${upsideColor}`,
+            transform: 'translateX(-50%)',
+          }} />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
+          <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: 'rgba(240,236,224,0.5)' }}>
+            ● Actuel: {fmt(currentPrice)}
+          </span>
+          <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: upsideColor }}>
+            ● Juste valeur: {fmt(val.fairValue)}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Main component ───────────────────────────────────────────
 export default function StockDetail({ stockId, onBack }: StockDetailProps) {
   const stock = getStockById(stockId)
   const { prices } = usePrices()
@@ -51,10 +190,9 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
   )
 
   const livePrice = prices[stock.id] ?? stock.currentPrice
-  const target = calcFCFTarget(stock.fcfPerShare, stock.fcfGrowthRate)
-  const upside = calcUpside(livePrice, target)
-  const color = upsideColorMap[getUpsideColor(upside)]
-  const label = getStatusLabel(upside)
+  const val = getValuation(stock.id, livePrice)
+  const upside = val.upside
+  const upsideColor = getUpsideColorNew(upside)
   const curr = stock.currency === 'JPY' ? '¥' : stock.currency === 'GBP' ? '£' : stock.currency === 'AUD' ? 'A$' : '$'
   const vc = verdictConfig[stock.verdict] ?? verdictConfig.watchlist
 
@@ -64,20 +202,10 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
       <button
         onClick={onBack}
         style={{
-          background: 'none',
-          border: '1px solid rgba(201,168,76,0.2)',
-          borderRadius: '8px',
-          color: 'rgba(201,168,76,0.6)',
-          fontFamily: 'DM Mono, monospace',
-          fontSize: '10px',
-          letterSpacing: '0.1em',
-          padding: '8px 18px',
-          cursor: 'pointer',
-          marginBottom: '36px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          transition: 'color 0.2s, border-color 0.2s',
+          background: 'none', border: '1px solid rgba(201,168,76,0.2)', borderRadius: '8px',
+          color: 'rgba(201,168,76,0.6)', fontFamily: 'DM Mono, monospace', fontSize: '10px',
+          letterSpacing: '0.1em', padding: '8px 18px', cursor: 'pointer', marginBottom: '36px',
+          display: 'flex', alignItems: 'center', gap: '8px', transition: 'color 0.2s, border-color 0.2s',
         }}
         onMouseEnter={e => { e.currentTarget.style.color = GOLD; e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)' }}
         onMouseLeave={e => { e.currentTarget.style.color = 'rgba(201,168,76,0.6)'; e.currentTarget.style.borderColor = 'rgba(201,168,76,0.2)' }}
@@ -87,7 +215,7 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
 
       {/* ── Hero ── */}
       <div className="card" style={{ padding: '40px 48px', marginBottom: '28px' }}>
-        {/* Top row: logo + identity + verdict */}
+        {/* Identity row */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <CompanyLogo ticker={stock.id} size={80} />
@@ -95,7 +223,7 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
               <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '52px', fontWeight: 600, color: GOLD, lineHeight: 1 }}>
                 {stock.id}
               </div>
-              <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: 'rgba(240,236,224,0.65)', marginTop: '4px', lineHeight: 1.3 }}>
+              <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: 'rgba(240,236,224,0.65)', marginTop: '4px' }}>
                 {stock.name}
               </div>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '8px' }}>
@@ -109,29 +237,18 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
               </div>
             </div>
           </div>
-
-          {/* Verdict badge */}
           <span style={{
-            fontFamily: 'DM Mono, monospace',
-            fontSize: '12px',
-            fontWeight: 700,
-            letterSpacing: '0.14em',
-            color: vc.color,
-            background: vc.bg,
-            border: `1px solid ${vc.border}`,
-            padding: '8px 20px',
-            borderRadius: '999px',
+            fontFamily: 'DM Mono, monospace', fontSize: '12px', fontWeight: 700, letterSpacing: '0.14em',
+            color: vc.color, background: vc.bg, border: `1px solid ${vc.border}`, padding: '8px 20px', borderRadius: '999px',
           }}>
             {vc.label}
           </span>
         </div>
 
-        {/* Divider */}
         <div style={{ height: '1px', background: 'linear-gradient(90deg, rgba(201,168,76,0.2), transparent)', marginBottom: '32px' }} />
 
-        {/* Price data row */}
+        {/* Price row */}
         <div style={{ display: 'flex', gap: '48px', alignItems: 'flex-end' }}>
-          {/* Current price */}
           <div>
             <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.35)', letterSpacing: '0.12em', marginBottom: '6px' }}>
               PRIX RÉFÉRENCE
@@ -140,38 +257,30 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
               {curr}{stock.currency === 'JPY' ? livePrice.toLocaleString() : livePrice.toFixed(2)}
             </div>
           </div>
-
-          {/* Separator */}
           <div style={{ width: '1px', height: '64px', background: 'rgba(201,168,76,0.15)' }} />
-
-          {/* Target */}
           <div>
             <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.35)', letterSpacing: '0.12em', marginBottom: '6px' }}>
-              CIBLE FCF
+              JUSTE VALEUR
             </div>
-            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '40px', fontWeight: 300, color: 'rgba(240,236,224,0.7)', lineHeight: 1 }}>
-              {curr}{stock.currency === 'JPY' ? Math.round(target).toLocaleString() : target.toFixed(2)}
+            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '40px', fontWeight: 300, color: 'rgba(240,236,224,0.75)', lineHeight: 1 }}>
+              {curr}{stock.currency === 'JPY' ? Math.round(val.fairValue).toLocaleString() : val.fairValue.toFixed(2)}
             </div>
           </div>
-
-          {/* Separator */}
           <div style={{ width: '1px', height: '64px', background: 'rgba(201,168,76,0.15)' }} />
-
-          {/* Upside pill */}
           <div>
             <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.35)', letterSpacing: '0.12em', marginBottom: '8px' }}>
               UPSIDE
             </div>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '10px',
-              background: `${color}12`, border: `1px solid ${color}35`,
+              background: `${upsideColor}12`, border: `1px solid ${upsideColor}35`,
               borderRadius: '999px', padding: '10px 24px',
             }}>
-              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '32px', fontWeight: 600, color, lineHeight: 1, letterSpacing: '-0.01em' }}>
+              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '32px', fontWeight: 600, color: upsideColor, lineHeight: 1, letterSpacing: '-0.01em' }}>
                 {upside >= 0 ? '+' : ''}{upside.toFixed(1)}%
               </span>
-              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color, opacity: 0.75, letterSpacing: '0.08em' }}>
-                {label}
+              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: upsideColor, opacity: 0.75, letterSpacing: '0.08em' }}>
+                {getStatusLabel(upside)}
               </span>
             </div>
           </div>
@@ -181,12 +290,9 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
       {/* Sector note */}
       {stock.sectorAdaptation && (
         <div style={{
-          background: 'rgba(201,168,76,0.04)',
-          border: '1px solid rgba(201,168,76,0.15)',
-          borderLeft: '3px solid rgba(201,168,76,0.45)',
-          borderRadius: '0 10px 10px 0',
-          padding: '12px 18px',
-          marginBottom: '28px',
+          background: 'rgba(201,168,76,0.04)', border: '1px solid rgba(201,168,76,0.15)',
+          borderLeft: '3px solid rgba(201,168,76,0.45)', borderRadius: '0 10px 10px 0',
+          padding: '12px 18px', marginBottom: '28px',
         }}>
           <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(201,168,76,0.65)', letterSpacing: '0.08em' }}>
             NOTE SECTORIELLE — {stock.sectorAdaptation}
@@ -194,8 +300,13 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
         </div>
       )}
 
-      {/* 8-panel grid */}
+      {/* 9-panel grid (valuation + 8 original) */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+
+        {/* Panel 0 — Valuation (full width) */}
+        <Panel title="Valorisation — 3 Méthodes" fullWidth>
+          <ValuationPanel stockId={stock.id} currentPrice={livePrice} currency={stock.currency} />
+        </Panel>
 
         {/* Panel 1 — Filters L1-L5 */}
         <Panel title="Filtres Fondamentaux L1–L5">
@@ -217,10 +328,8 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
             {stock.thesis.map((point, i) => (
               <div key={i} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
                 <div style={{
-                  width: '22px', height: '22px',
-                  border: '1px solid rgba(201,168,76,0.25)',
-                  borderRadius: '6px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: '22px', height: '22px', border: '1px solid rgba(201,168,76,0.25)',
+                  borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0, marginTop: '1px',
                 }}>
                   <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(201,168,76,0.6)' }}>{i + 1}</span>

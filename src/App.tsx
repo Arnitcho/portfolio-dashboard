@@ -21,19 +21,18 @@ function App() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0a0906', color: '#f0ece0' }}>
-      {view !== 'detail' && (
-        <Nav view={view} onNavigate={(v) => setView(v as 'overview' | 'prices')} />
-      )}
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
-        {view === 'overview' && (
-          <Overview onSelectStock={handleSelectStock} />
-        )}
-        {view === 'prices' && (
-          <PriceMonitor onSelectStock={handleSelectStock} />
-        )}
-        {view === 'detail' && selectedStockId && (
-          <StockDetail stockId={selectedStockId} onBack={handleBack} />
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg)', color: 'var(--text-primary)' }}>
+      <Nav
+        view={view}
+        onNavigate={v => setView(v as View)}
+        stockId={view === 'detail' ? selectedStockId : null}
+        onBack={handleBack}
+      />
+      <div className="page-container">
+        {view === 'overview' && <Overview onSelectStock={handleSelectStock} />}
+        {view === 'prices'   && <PriceMonitor onSelectStock={handleSelectStock} />}
+        {view === 'detail'   && selectedStockId && (
+          <StockDetail stockId={selectedStockId} />
         )}
       </div>
     </div>

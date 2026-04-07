@@ -48,15 +48,22 @@ export default function PriceMonitor({ onSelectStock }: PriceMonitorProps) {
   }
 
   return (
-    <div style={{ paddingTop: '56px', paddingBottom: '80px' }}>
+    <div className="page-content">
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
         <div>
-          <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '56px', fontWeight: 300, color: '#e8eaf0', lineHeight: 1, marginBottom: '10px' }}>
-            Price Monitor
+          <h1 style={{
+            fontFamily: 'Cormorant Garamond, serif',
+            fontSize: 'clamp(2.5rem, 5vw, 3.75rem)',
+            fontWeight: 300, color: '#e8eaf0', lineHeight: 1.05, marginBottom: '0.75rem',
+          }}>
+            Prix & Upside
           </h1>
-          <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(240,180,41,0.5)', letterSpacing: '0.12em' }}>
-            SAISIE MANUELLE · AUTO-FETCH 15 MIN · CIBLE = FCF × (1+g)³ / (0.15 − g)
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9375rem', color: '#8892a4', lineHeight: 1.6, maxWidth: '48ch' }}>
+            Suivez l'évolution de chaque position. Ajustez les prix manuellement ou laissez le système se rafraîchir automatiquement toutes les 15 minutes.
+          </p>
+          <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.5625rem', color: 'rgba(240,180,41,0.4)', letterSpacing: '0.12em', marginTop: '0.75rem' }}>
+            CIBLE FCF = FCF × (1+g)³ / (0.15 − g)
           </p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>

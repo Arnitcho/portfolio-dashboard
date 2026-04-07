@@ -13,7 +13,6 @@ import { usePrices } from '../hooks/usePrices'
 
 interface StockDetailProps {
   stockId: string
-  onBack: () => void
 }
 
 const GOLD = '#f0b429'
@@ -167,7 +166,7 @@ function ValuationPanel({ stockId, currentPrice, currency }: { stockId: string; 
   )
 }
 
-export default function StockDetail({ stockId, onBack }: StockDetailProps) {
+export default function StockDetail({ stockId }: StockDetailProps) {
   const stock = getStockById(stockId)
   const { prices } = usePrices()
 
@@ -185,21 +184,7 @@ export default function StockDetail({ stockId, onBack }: StockDetailProps) {
   const vc = verdictConfig[stock.verdict] ?? verdictConfig.watchlist
 
   return (
-    <div style={{ paddingTop: '40px', paddingBottom: '80px' }}>
-      {/* Back button */}
-      <button
-        onClick={onBack}
-        style={{
-          background: 'none', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px',
-          color: '#8892a4', fontFamily: 'DM Mono, monospace', fontSize: '10px',
-          letterSpacing: '0.1em', padding: '8px 18px', cursor: 'pointer', marginBottom: '36px',
-          display: 'flex', alignItems: 'center', gap: '8px', transition: 'color 0.2s, border-color 0.2s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.color = GOLD; e.currentTarget.style.borderColor = 'rgba(240,180,41,0.35)' }}
-        onMouseLeave={e => { e.currentTarget.style.color = '#8892a4'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
-      >
-        ← PORTFOLIO OVERVIEW
-      </button>
+    <div className="page-content">
 
       {/* ── Hero ── */}
       <div className="card" style={{

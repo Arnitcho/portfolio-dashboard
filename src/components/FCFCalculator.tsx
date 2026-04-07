@@ -8,6 +8,8 @@ interface FCFCalculatorProps {
   currency?: string
 }
 
+const GOLD = '#f0b429'
+
 export default function FCFCalculator({ defaultPrice, defaultFCF, defaultG, currency = 'USD' }: FCFCalculatorProps) {
   const [price, setPrice] = useState(defaultPrice)
   const [fcf, setFcf] = useState(defaultFCF)
@@ -56,16 +58,16 @@ export default function FCFCalculator({ defaultPrice, defaultFCF, defaultG, curr
       <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
         padding: '20px 24px',
-        background: 'rgba(201,168,76,0.04)',
-        border: '1px solid rgba(201,168,76,0.15)',
+        background: 'rgba(240,180,41,0.05)',
+        border: '1px solid rgba(240,180,41,0.15)',
         borderRadius: '12px',
         marginBottom: '24px',
       }}>
         <div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.4)', letterSpacing: '0.12em', marginBottom: '6px' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.12em', marginBottom: '6px' }}>
             PRIX CIBLE FCF
           </div>
-          <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '40px', fontWeight: 300, color: '#c9a84c', lineHeight: 1 }}>
+          <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '40px', fontWeight: 300, color: GOLD, lineHeight: 1 }}>
             {curr}{currency === 'JPY' ? Math.round(target).toLocaleString() : target.toFixed(2)}
           </div>
         </div>
@@ -75,8 +77,8 @@ export default function FCFCalculator({ defaultPrice, defaultFCF, defaultG, curr
           </div>
           <span style={{
             fontFamily: 'DM Mono, monospace', fontSize: '9px', letterSpacing: '0.1em',
-            color, background: `${color}15`, padding: '3px 10px',
-            border: `1px solid ${color}30`, borderRadius: '999px',
+            color, background: `${color}12`, padding: '3px 10px',
+            border: `1px solid ${color}28`, borderRadius: '999px',
           }}>
             {label}
           </span>
@@ -88,27 +90,23 @@ export default function FCFCalculator({ defaultPrice, defaultFCF, defaultG, curr
         {sliders.map(s => (
           <div key={s.label}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: 'rgba(240,236,224,0.6)' }}>
+              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#8892a4' }}>
                 {s.label}
               </span>
-              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '13px', fontWeight: 500, color: '#c9a84c' }}>
+              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '13px', fontWeight: 500, color: GOLD }}>
                 {s.format(s.value)}
               </span>
             </div>
             <input
-              type="range"
-              min={s.min}
-              max={s.max}
-              step={s.step}
-              value={s.value}
+              type="range" min={s.min} max={s.max} step={s.step} value={s.value}
               onChange={e => s.onChange(parseFloat(e.target.value))}
-              style={{ width: '100%', accentColor: '#c9a84c' }}
+              style={{ width: '100%', accentColor: GOLD }}
             />
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px' }}>
-              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.2)' }}>
+              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568' }}>
                 {s.format(s.min)}
               </span>
-              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.2)' }}>
+              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568' }}>
                 {s.format(s.max)}
               </span>
             </div>
@@ -117,8 +115,8 @@ export default function FCFCalculator({ defaultPrice, defaultFCF, defaultG, curr
       </div>
 
       {/* Formula note */}
-      <div style={{ marginTop: '20px', padding: '12px 16px', background: 'rgba(201,168,76,0.03)', border: '1px solid rgba(201,168,76,0.1)', borderRadius: '8px' }}>
-        <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.3)', letterSpacing: '0.05em' }}>
+      <div style={{ marginTop: '20px', padding: '12px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '8px' }}>
+        <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.05em' }}>
           TARGET = FCF × (1+g)³ / (0.15 − g)
         </span>
       </div>

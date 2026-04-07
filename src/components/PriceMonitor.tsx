@@ -9,12 +9,14 @@ interface PriceMonitorProps {
   onSelectStock: (id: string) => void
 }
 
+const GOLD = '#f0b429'
+
 function StatusDot({ status }: { status: string }) {
   const map = {
-    live:   { color: '#34d399', label: 'LIVE',   glow: true },
-    cached: { color: '#fbbf24', label: 'CACHED',  glow: false },
+    live:   { color: '#10b981', label: 'LIVE',   glow: true },
+    cached: { color: '#f59e0b', label: 'CACHED',  glow: false },
     error:  { color: '#ef4444', label: 'ERROR',   glow: false },
-    idle:   { color: '#6b7280', label: 'IDLE',    glow: false },
+    idle:   { color: '#4a5568', label: 'IDLE',    glow: false },
   }
   const e = map[status as keyof typeof map] ?? map.idle
   return (
@@ -50,17 +52,17 @@ export default function PriceMonitor({ onSelectStock }: PriceMonitorProps) {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
         <div>
-          <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '56px', fontWeight: 300, color: '#f0ece0', lineHeight: 1, marginBottom: '10px' }}>
+          <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '56px', fontWeight: 300, color: '#e8eaf0', lineHeight: 1, marginBottom: '10px' }}>
             Price Monitor
           </h1>
-          <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(201,168,76,0.55)', letterSpacing: '0.12em' }}>
+          <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(240,180,41,0.5)', letterSpacing: '0.12em' }}>
             SAISIE MANUELLE · AUTO-FETCH 15 MIN · CIBLE = FCF × (1+g)³ / (0.15 − g)
           </p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
           <StatusDot status={status} />
           {lastUpdated && (
-            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: 'rgba(240,236,224,0.25)' }}>
+            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: '#4a5568' }}>
               Mis à jour {lastUpdated.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
             </span>
           )}
@@ -68,10 +70,10 @@ export default function PriceMonitor({ onSelectStock }: PriceMonitorProps) {
             onClick={fetchPrices}
             style={{
               display: 'flex', alignItems: 'center', gap: '7px',
-              background: 'rgba(201,168,76,0.08)',
-              border: '1px solid rgba(201,168,76,0.3)',
+              background: 'rgba(240,180,41,0.08)',
+              border: '1px solid rgba(240,180,41,0.25)',
               borderRadius: '8px',
-              color: '#c9a84c',
+              color: GOLD,
               fontFamily: 'DM Mono, monospace',
               fontSize: '10px',
               letterSpacing: '0.1em',
@@ -79,6 +81,8 @@ export default function PriceMonitor({ onSelectStock }: PriceMonitorProps) {
               cursor: 'pointer',
               transition: 'background 0.2s',
             }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(240,180,41,0.14)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(240,180,41,0.08)')}
           >
             <RefreshCw size={13} /> REFRESH
           </button>
@@ -87,21 +91,18 @@ export default function PriceMonitor({ onSelectStock }: PriceMonitorProps) {
 
       {/* Table */}
       <div className="card" style={{ overflow: 'hidden', padding: 0 }}>
-        {/* Table header */}
+        {/* Header row */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '2fr 2fr 2fr 1.5fr 1fr 2fr 2fr 2.5fr',
           padding: '14px 28px',
-          borderBottom: '1px solid rgba(201,168,76,0.12)',
-          background: 'rgba(201,168,76,0.04)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          background: 'rgba(240,180,41,0.04)',
         }}>
           {['TICKER', 'NOM', 'PRIX ACTUEL', 'FCF/SHARE', 'G%', 'CIBLE FCF', 'UPSIDE', 'STATUT'].map((h, i) => (
             <div key={h} style={{
-              fontFamily: 'DM Mono, monospace',
-              fontSize: '9px',
-              letterSpacing: '0.12em',
-              color: 'rgba(201,168,76,0.55)',
-              textAlign: i >= 2 ? 'right' : 'left',
+              fontFamily: 'DM Mono, monospace', fontSize: '9px', letterSpacing: '0.12em',
+              color: 'rgba(240,180,41,0.5)', textAlign: i >= 2 ? 'right' : 'left',
             }}>
               {h}
             </div>
@@ -124,27 +125,25 @@ export default function PriceMonitor({ onSelectStock }: PriceMonitorProps) {
                 display: 'grid',
                 gridTemplateColumns: '2fr 2fr 2fr 1.5fr 1fr 2fr 2fr 2.5fr',
                 padding: '0 28px',
-                borderBottom: '1px solid rgba(201,168,76,0.07)',
+                borderBottom: '1px solid rgba(255,255,255,0.04)',
                 alignItems: 'center',
                 minHeight: '64px',
                 transition: 'background 0.15s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(201,168,76,0.04)')}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(240,180,41,0.03)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {/* Ticker + logo */}
-              <div
-                onClick={() => onSelectStock(stock.id)}
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
-              >
+              <div onClick={() => onSelectStock(stock.id)}
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
                 <CompanyLogo ticker={stock.id} size={28} />
-                <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '13px', fontWeight: 600, color: '#c9a84c' }}>
+                <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '13px', fontWeight: 600, color: GOLD }}>
                   {stock.id}
                 </span>
               </div>
 
               {/* Name */}
-              <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: 'rgba(240,236,224,0.65)' }}>
+              <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#8892a4' }}>
                 {stock.name}
               </div>
 
@@ -152,35 +151,33 @@ export default function PriceMonitor({ onSelectStock }: PriceMonitorProps) {
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <div style={{
                   display: 'inline-flex', alignItems: 'center', gap: '4px',
-                  background: 'rgba(201,168,76,0.07)',
-                  border: '1px solid rgba(201,168,76,0.2)',
-                  borderRadius: '8px',
-                  padding: '6px 10px',
-                  minWidth: '90px',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '8px', padding: '6px 10px', minWidth: '90px',
                 }}>
-                  <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(201,168,76,0.55)' }}>{curr}</span>
+                  <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: '#4a5568' }}>{curr}</span>
                   <input
                     type="number"
                     value={manualPrices[stock.id] ?? ''}
                     placeholder={String(currentPrice)}
                     onChange={e => handleInput(stock.id, e.target.value)}
-                    style={{ background: 'transparent', border: 'none', outline: 'none', fontFamily: 'DM Mono, monospace', fontSize: '12px', color: '#f0ece0', width: '72px', textAlign: 'right' }}
+                    style={{ background: 'transparent', border: 'none', outline: 'none', fontFamily: 'DM Mono, monospace', fontSize: '12px', color: '#e8eaf0', width: '72px', textAlign: 'right' }}
                   />
                 </div>
               </div>
 
               {/* FCF/share */}
-              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '12px', color: 'rgba(240,236,224,0.55)', textAlign: 'right' }}>
+              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '12px', color: '#8892a4', textAlign: 'right' }}>
                 {curr}{stock.currency === 'JPY' ? stock.fcfPerShare.toLocaleString() : stock.fcfPerShare.toFixed(2)}
               </div>
 
               {/* g% */}
-              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '12px', color: 'rgba(240,236,224,0.55)', textAlign: 'right' }}>
+              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '12px', color: '#8892a4', textAlign: 'right' }}>
                 {(stock.fcfGrowthRate * 100).toFixed(0)}%
               </div>
 
               {/* Target */}
-              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '13px', fontWeight: 600, color: '#c9a84c', textAlign: 'right' }}>
+              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '13px', fontWeight: 600, color: GOLD, textAlign: 'right' }}>
                 {curr}{stock.currency === 'JPY' ? Math.round(target).toLocaleString() : target.toFixed(2)}
               </div>
 
@@ -193,7 +190,7 @@ export default function PriceMonitor({ onSelectStock }: PriceMonitorProps) {
               <div style={{ textAlign: 'right' }}>
                 <span style={{
                   fontFamily: 'DM Mono, monospace', fontSize: '9px', letterSpacing: '0.07em',
-                  color, background: `${color}14`, border: `1px solid ${color}30`,
+                  color, background: `${color}12`, border: `1px solid ${color}28`,
                   padding: '4px 10px', borderRadius: '999px', whiteSpace: 'nowrap',
                 }}>
                   {label}
@@ -202,24 +199,6 @@ export default function PriceMonitor({ onSelectStock }: PriceMonitorProps) {
             </div>
           )
         })}
-      </div>
-
-      {/* Legend */}
-      <div style={{ marginTop: '32px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-        {[
-          { color: '#34d399', label: '>40% — Forte décote' },
-          { color: '#6ee7b7', label: '20–40% — Décote' },
-          { color: '#a7f3d0', label: '5–20% — Légère décote' },
-          { color: '#fbbf24', label: '±5% — Juste prix' },
-          { color: '#f97316', label: '-5 à -20% — Prime' },
-          { color: '#f87171', label: '-20 à -35% — Prime élevée' },
-          { color: '#ef4444', label: '<-35% — Forte prime' },
-        ].map(l => (
-          <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: l.color, flexShrink: 0 }} />
-            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: 'rgba(240,236,224,0.35)' }}>{l.label}</span>
-          </div>
-        ))}
       </div>
     </div>
   )

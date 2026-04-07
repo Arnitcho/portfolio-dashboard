@@ -3,8 +3,7 @@ interface NavProps {
   onNavigate: (view: string) => void
 }
 
-const GOLD = '#c9a84c'
-const BG = '#0a0906'
+const GOLD = '#f0b429'
 
 export default function Nav({ view, onNavigate }: NavProps) {
   const tabs = [
@@ -14,13 +13,17 @@ export default function Nav({ view, onNavigate }: NavProps) {
 
   return (
     <header style={{
-      backgroundColor: BG,
-      borderBottom: '1px solid rgba(201,168,76,0.15)',
+      backgroundColor: '#0d1120',
+      borderBottom: `1px solid ${GOLD}22`,
       position: 'sticky',
       top: 0,
       zIndex: 50,
-      backdropFilter: 'blur(12px)',
+      backdropFilter: 'blur(16px)',
+      boxShadow: '0 1px 0 rgba(240,180,41,0.12)',
     }}>
+      {/* thin gold accent line at very bottom */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: `linear-gradient(90deg, transparent, ${GOLD}30, transparent)` }} />
+
       <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', height: '70px', gap: '48px' }}>
 
@@ -30,7 +33,10 @@ export default function Nav({ view, onNavigate }: NavProps) {
               fontFamily: 'Cormorant Garamond, serif',
               fontSize: '26px',
               fontWeight: 600,
-              color: GOLD,
+              background: `linear-gradient(90deg, ${GOLD}, #ffd166)`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
               letterSpacing: '0.06em',
               lineHeight: 1,
             }}>
@@ -39,7 +45,7 @@ export default function Nav({ view, onNavigate }: NavProps) {
             <span style={{
               fontFamily: 'DM Mono, monospace',
               fontSize: '10px',
-              color: 'rgba(201,168,76,0.45)',
+              color: 'rgba(240,180,41,0.4)',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
             }}>
@@ -59,16 +65,16 @@ export default function Nav({ view, onNavigate }: NavProps) {
                     background: 'none',
                     border: 'none',
                     borderBottom: active ? `2px solid ${GOLD}` : '2px solid transparent',
-                    color: active ? GOLD : 'rgba(240,236,224,0.4)',
+                    color: active ? GOLD : '#8892a4',
                     fontFamily: 'DM Mono, monospace',
                     fontSize: '11px',
-                    fontWeight: active ? 500 : 400,
+                    fontWeight: active ? 600 : 400,
                     letterSpacing: '0.13em',
                     cursor: 'pointer',
                     padding: '0 24px',
                     height: '100%',
                     transition: 'color 0.2s, border-color 0.2s',
-                    textShadow: active ? `0 0 20px rgba(201,168,76,0.4)` : 'none',
+                    textShadow: active ? `0 0 20px rgba(240,180,41,0.5)` : 'none',
                   }}
                 >
                   {tab.label}
@@ -78,7 +84,7 @@ export default function Nav({ view, onNavigate }: NavProps) {
           </nav>
 
           {/* Date */}
-          <div style={{ marginLeft: 'auto', fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(240,236,224,0.25)', letterSpacing: '0.05em' }}>
+          <div style={{ marginLeft: 'auto', fontFamily: 'DM Mono, monospace', fontSize: '11px', color: '#4a5568', letterSpacing: '0.05em' }}>
             {new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })}
           </div>
         </div>

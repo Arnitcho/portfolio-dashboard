@@ -32,8 +32,8 @@ export default function CompanyLogo({ ticker, size = 40 }: CompanyLogoProps) {
         width: size,
         height: size,
         borderRadius: '50%',
-        background: 'rgba(201,168,76,0.15)',
-        border: '1px solid rgba(201,168,76,0.4)',
+        background: 'rgba(240,180,41,0.1)',
+        border: '1px solid rgba(240,180,41,0.25)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -43,7 +43,7 @@ export default function CompanyLogo({ ticker, size = 40 }: CompanyLogoProps) {
           fontFamily: 'DM Mono, monospace',
           fontSize: Math.round(size * 0.3),
           fontWeight: 600,
-          color: '#c9a84c',
+          color: '#f0b429',
           letterSpacing: '-0.02em',
         }}>
           {initials}

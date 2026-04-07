@@ -1,5 +1,7 @@
 import type { MoatCriterion } from '../data/stocks'
 
+const GOLD = '#f0b429'
+
 interface MoatBarProps {
   moat: MoatCriterion[]
   score: number
@@ -15,35 +17,30 @@ export default function MoatBar({ moat, score, compact = false }: MoatBarProps) 
             key={i}
             title={m.name}
             style={{
-              width: '10px',
-              height: '10px',
-              borderRadius: '3px',
-              background: m.score === 1 ? '#c9a84c' : 'rgba(201,168,76,0.12)',
-              border: m.score === 0 ? '1px solid rgba(201,168,76,0.2)' : 'none',
+              width: '10px', height: '10px', borderRadius: '3px',
+              background: m.score === 1 ? GOLD : 'rgba(240,180,41,0.1)',
+              border: m.score === 0 ? '1px solid rgba(240,180,41,0.15)' : 'none',
               transition: 'background 0.2s',
             }}
           />
         ))}
-        <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(240,236,224,0.4)', marginLeft: '6px' }}>
+        <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: '#4a5568', marginLeft: '6px' }}>
           {score}/6
         </span>
       </div>
     )
   }
 
+  const scoreColor = score === 6 ? GOLD : score >= 4 ? '#f59e0b' : '#f87171'
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '14px', color: 'rgba(240,236,224,0.45)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        <span style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '14px', color: '#4a5568', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           Fossé concurrentiel
         </span>
-        <span style={{
-          fontFamily: 'DM Mono, monospace',
-          fontSize: '20px',
-          fontWeight: 500,
-          color: score === 6 ? '#c9a84c' : score >= 4 ? '#fbbf24' : '#f87171',
-        }}>
-          {score}<span style={{ fontSize: '13px', color: 'rgba(240,236,224,0.25)', marginLeft: '2px' }}>/6</span>
+        <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '20px', fontWeight: 500, color: scoreColor }}>
+          {score}<span style={{ fontSize: '13px', color: '#4a5568', marginLeft: '2px' }}>/6</span>
         </span>
       </div>
 
@@ -52,20 +49,20 @@ export default function MoatBar({ moat, score, compact = false }: MoatBarProps) 
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{
               width: '8px', height: '8px', borderRadius: '2px', flexShrink: 0,
-              background: criterion.score === 1 ? '#c9a84c' : 'transparent',
-              border: criterion.score === 0 ? '1px solid rgba(201,168,76,0.25)' : 'none',
+              background: criterion.score === 1 ? GOLD : 'transparent',
+              border: criterion.score === 0 ? '1px solid rgba(240,180,41,0.2)' : 'none',
             }} />
             <span style={{
               fontFamily: 'DM Sans, sans-serif', fontSize: '13px', flex: 1,
-              color: criterion.score === 1 ? '#f0ece0' : 'rgba(240,236,224,0.3)',
+              color: criterion.score === 1 ? '#e8eaf0' : '#4a5568',
             }}>
               {criterion.name}
             </span>
-            <div style={{ width: '96px', height: '3px', background: 'rgba(201,168,76,0.1)', borderRadius: '2px', flexShrink: 0 }}>
+            <div style={{ width: '96px', height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px', flexShrink: 0 }}>
               <div style={{
                 height: '100%', borderRadius: '2px',
                 width: criterion.score === 1 ? '100%' : '0%',
-                background: 'linear-gradient(90deg, #c9a84c, rgba(201,168,76,0.6))',
+                background: `linear-gradient(90deg, ${GOLD}, #ffd166)`,
                 transition: 'width 0.6s ease',
               }} />
             </div>
@@ -78,7 +75,7 @@ export default function MoatBar({ moat, score, compact = false }: MoatBarProps) 
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} style={{
             flex: 1, height: '4px', borderRadius: '2px',
-            background: i < score ? '#c9a84c' : 'rgba(201,168,76,0.12)',
+            background: i < score ? GOLD : 'rgba(240,180,41,0.1)',
             transition: 'background 0.3s',
           }} />
         ))}

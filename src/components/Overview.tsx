@@ -11,11 +11,11 @@ interface OverviewProps {
   onSelectStock: (id: string) => void
 }
 
-const GOLD = '#c9a84c'
+const GOLD = '#f0b429'
 
 function SectorIcon({ ticker }: { ticker: string }) {
   const map: Record<string, { icon: React.ReactNode; color: string }> = {
-    FTNT:  { icon: <Shield size={14} />,   color: '#60a5fa' },
+    FTNT:  { icon: <Shield size={14} />,    color: '#60a5fa' },
     MSCI:  { icon: <BarChart2 size={14} />, color: GOLD },
     ICE:   { icon: <BarChart2 size={14} />, color: GOLD },
     MA:    { icon: <BarChart2 size={14} />, color: GOLD },
@@ -44,18 +44,17 @@ function VerdictBadge({ verdict }: { verdict: string }) {
       fontFamily: 'DM Mono, monospace',
       fontSize: '10px',
       letterSpacing: '0.1em',
-      padding: '4px 12px',
-      borderRadius: '999px',
+      padding: '5px 14px',
+      borderRadius: '20px',
     }}>
       {c.label}
     </span>
   )
 }
 
-// Price target pill: DCF (blue), Multiple (gold), RI (purple)
 function TargetPill({ label, value, color, bg }: { label: string; value: string; color: string; bg: string }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
       <span style={{
         fontFamily: 'DM Mono, monospace', fontSize: '9px', letterSpacing: '0.1em',
         color, background: bg, padding: '2px 8px', borderRadius: '999px', whiteSpace: 'nowrap',
@@ -74,23 +73,17 @@ function StockCard({ stock, livePrice, onSelect }: { stock: Stock; livePrice: nu
   const upside = val.upside
   const upsideColor = getUpsideColorNew(upside)
   const curr = stock.currency === 'JPY' ? '¥' : stock.currency === 'GBP' ? '£' : stock.currency === 'AUD' ? 'A$' : '$'
-
   const fmt = (n: number) => formatPrice(n, stock.currency)
 
-  // Card border glow based on upside
   const borderColor = upside > 10
-    ? 'rgba(34,197,94,0.35)'
+    ? 'rgba(16,185,129,0.3)'
     : upside > -10
-    ? 'rgba(201,168,76,0.3)'
-    : 'rgba(239,68,68,0.3)'
+    ? 'rgba(240,180,41,0.25)'
+    : 'rgba(239,68,68,0.25)'
 
   return (
-    <div
-      className="stock-card"
-      onClick={onSelect}
-      style={{ borderColor }}
-    >
-      {/* Top row: logo + ticker + verdict */}
+    <div className="stock-card" onClick={onSelect} style={{ borderColor }}>
+      {/* Top row */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <CompanyLogo ticker={stock.id} size={44} />
@@ -98,7 +91,7 @@ function StockCard({ stock, livePrice, onSelect }: { stock: Stock; livePrice: nu
             <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '26px', fontWeight: 600, color: GOLD, lineHeight: 1 }}>
               {stock.id}
             </div>
-            <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: 'rgba(240,236,224,0.6)', marginTop: '2px' }}>
+            <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#8892a4', marginTop: '2px' }}>
               {stock.name}
             </div>
           </div>
@@ -109,59 +102,44 @@ function StockCard({ stock, livePrice, onSelect }: { stock: Stock; livePrice: nu
       {/* Sector */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '18px' }}>
         <SectorIcon ticker={stock.id} />
-        <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: 'rgba(240,236,224,0.4)' }}>
+        <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: '#4a5568' }}>
           {stock.sector}
         </span>
       </div>
 
-      <div style={{ height: '1px', background: 'linear-gradient(90deg, rgba(201,168,76,0.2), transparent)', marginBottom: '18px' }} />
+      <div style={{ height: '1px', background: 'linear-gradient(90deg, rgba(240,180,41,0.2), transparent)', marginBottom: '18px' }} />
 
       {/* 3 price targets */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-        <TargetPill
-          label="DCF"
-          value={fmt(val.dcf)}
-          color="#60a5fa"
-          bg="rgba(96,165,250,0.1)"
-        />
-        <div style={{ width: '1px', height: '40px', background: 'rgba(201,168,76,0.12)', alignSelf: 'center' }} />
-        <TargetPill
-          label="MULTIPLE"
-          value={fmt(val.multiple)}
-          color={GOLD}
-          bg="rgba(201,168,76,0.1)"
-        />
-        <div style={{ width: '1px', height: '40px', background: 'rgba(201,168,76,0.12)', alignSelf: 'center' }} />
-        <TargetPill
-          label="RI/EVA"
-          value={fmt(val.residualIncome)}
-          color="#c084fc"
-          bg="rgba(192,132,252,0.1)"
-        />
+        <TargetPill label="DCF"      value={fmt(val.dcf)}            color="#60a5fa" bg="rgba(96,165,250,0.1)" />
+        <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,0.06)', alignSelf: 'center' }} />
+        <TargetPill label="MULTIPLE" value={fmt(val.multiple)}       color={GOLD}    bg="rgba(240,180,41,0.1)" />
+        <div style={{ width: '1px', height: '40px', background: 'rgba(255,255,255,0.06)', alignSelf: 'center' }} />
+        <TargetPill label="RI/EVA"   value={fmt(val.residualIncome)} color="#c084fc" bg="rgba(192,132,252,0.1)" />
       </div>
 
       {/* Fair value + upside */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        background: `${upsideColor}08`,
+        background: `${upsideColor}0d`,
         border: `1px solid ${upsideColor}25`,
         borderRadius: '10px',
         padding: '10px 14px',
         marginBottom: '18px',
       }}>
         <div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.35)', letterSpacing: '0.1em', marginBottom: '3px' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.1em', marginBottom: '3px' }}>
             JUSTE VALEUR
           </div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '16px', fontWeight: 600, color: '#f0ece0' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '16px', fontWeight: 600, color: '#e8eaf0' }}>
             {fmt(val.fairValue)}
           </div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.35)', letterSpacing: '0.1em', marginBottom: '3px' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.1em', marginBottom: '3px' }}>
             UPSIDE
           </div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '36px', fontWeight: 600, color: upsideColor, lineHeight: 1, letterSpacing: '-0.02em' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '36px', fontWeight: 700, color: upsideColor, lineHeight: 1, letterSpacing: '-0.02em' }}>
             {upside >= 0 ? '+' : ''}{upside.toFixed(1)}%
           </div>
         </div>
@@ -172,9 +150,9 @@ function StockCard({ stock, livePrice, onSelect }: { stock: Stock; livePrice: nu
         <MoatBar moat={stock.moat} score={stock.moatScore} compact />
       </div>
 
-      <div style={{ height: '1px', background: 'rgba(201,168,76,0.08)', marginBottom: '14px' }} />
+      <div style={{ height: '1px', background: 'rgba(255,255,255,0.05)', marginBottom: '14px' }} />
 
-      {/* Bottom: current price + entry + filter dots */}
+      {/* Bottom row */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <div style={{ display: 'flex', gap: '16px' }}>
           {[
@@ -182,10 +160,10 @@ function StockCard({ stock, livePrice, onSelect }: { stock: Stock; livePrice: nu
             { label: 'ENTRÉE', value: stock.entryZone },
           ].map(m => (
             <div key={m.label}>
-              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,236,224,0.3)', letterSpacing: '0.1em', marginBottom: '2px' }}>
+              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.1em', marginBottom: '2px' }}>
                 {m.label}
               </div>
-              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(240,236,224,0.65)' }}>
+              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: '#8892a4' }}>
                 {m.value}
               </div>
             </div>
@@ -198,7 +176,7 @@ function StockCard({ stock, livePrice, onSelect }: { stock: Stock; livePrice: nu
               title={`${f.name}: ${f.value} (${f.threshold})`}
               style={{
                 width: '10px', height: '10px', borderRadius: '50%', flexShrink: 0,
-                background: f.status === 'pass' ? '#34d399' : f.status === 'warn' ? '#fbbf24' : '#ef4444',
+                background: f.status === 'pass' ? '#10b981' : f.status === 'warn' ? '#f59e0b' : '#ef4444',
               }}
             />
           ))}
@@ -213,12 +191,17 @@ function SectionHeader({ title, count, icon }: { title: string; count: number; i
     <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <span style={{ color: GOLD, display: 'flex' }}>{icon}</span>
-        <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '32px', fontWeight: 400, color: '#f0ece0', letterSpacing: '0.03em', lineHeight: 1 }}>
+        <h2 style={{
+          fontFamily: 'Cormorant Garamond, serif',
+          fontSize: '32px', fontWeight: 400, letterSpacing: '0.03em', lineHeight: 1,
+          background: `linear-gradient(90deg, ${GOLD}, #ffd166)`,
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+        }}>
           {title}
         </h2>
       </div>
       <div className="section-rule" />
-      <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(201,168,76,0.5)', whiteSpace: 'nowrap' }}>
+      <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(240,180,41,0.5)', whiteSpace: 'nowrap' }}>
         {count} position{count > 1 ? 's' : ''}
       </span>
     </div>
@@ -227,16 +210,24 @@ function SectionHeader({ title, count, icon }: { title: string; count: number; i
 
 function StatCard({ value, label, sub, icon }: { value: string; label: string; sub?: string; icon: React.ReactNode }) {
   return (
-    <div className="card" style={{ padding: '28px 32px', flex: 1 }}>
+    <div className="card" style={{
+      padding: '28px 32px', flex: 1,
+      borderLeft: `3px solid rgba(240,180,41,0.4)`,
+    }}>
       <div style={{ color: GOLD, marginBottom: '12px', display: 'flex' }}>{icon}</div>
-      <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '48px', fontWeight: 300, color: GOLD, lineHeight: 1, marginBottom: '8px' }}>
+      <div style={{
+        fontFamily: 'Cormorant Garamond, serif',
+        fontSize: '48px', fontWeight: 300, lineHeight: 1, marginBottom: '8px',
+        background: `linear-gradient(90deg, ${GOLD}, #ffd166)`,
+        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+      }}>
         {value}
       </div>
-      <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.12em', color: 'rgba(240,236,224,0.5)', marginBottom: '4px' }}>
+      <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', letterSpacing: '0.12em', color: '#8892a4', marginBottom: '4px' }}>
         {label}
       </div>
       {sub && (
-        <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: 'rgba(240,236,224,0.3)', lineHeight: 1.5 }}>
+        <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '12px', color: '#4a5568', lineHeight: 1.5 }}>
           {sub}
         </div>
       )}
@@ -255,10 +246,14 @@ export default function Overview({ onSelectStock }: OverviewProps) {
     <div style={{ paddingTop: '56px', paddingBottom: '80px' }}>
       {/* Page title */}
       <div style={{ marginBottom: '48px' }}>
-        <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '64px', fontWeight: 300, color: '#f0ece0', letterSpacing: '0.02em', lineHeight: 1, marginBottom: '12px' }}>
+        <h1 style={{
+          fontFamily: 'Cormorant Garamond, serif',
+          fontSize: '64px', fontWeight: 300, letterSpacing: '0.02em', lineHeight: 1, marginBottom: '12px',
+          color: '#e8eaf0',
+        }}>
           Portfolio
         </h1>
-        <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(201,168,76,0.55)', letterSpacing: '0.15em' }}>
+        <p style={{ fontFamily: 'DM Mono, monospace', fontSize: '11px', color: 'rgba(240,180,41,0.5)', letterSpacing: '0.15em' }}>
           FRAMEWORK 8 COUCHES · {stocks.length} POSITIONS · VALUATION 3 MÉTHODES · AVRIL 2026
         </p>
       </div>
@@ -275,7 +270,6 @@ export default function Overview({ onSelectStock }: OverviewProps) {
           sub="DCF · EV/Multiple · Residual Income" />
       </div>
 
-      {/* Achats actifs */}
       {buyStocks.length > 0 && (
         <section style={{ marginBottom: '64px' }}>
           <SectionHeader title="Achats actifs" count={buyStocks.length} icon={<TrendingUp size={20} />} />
@@ -287,7 +281,6 @@ export default function Overview({ onSelectStock }: OverviewProps) {
         </section>
       )}
 
-      {/* Surveillance */}
       {watchStocks.length > 0 && (
         <section style={{ marginBottom: '64px' }}>
           <SectionHeader title="Surveillance" count={watchStocks.length} icon={<Eye size={20} />} />
@@ -299,7 +292,6 @@ export default function Overview({ onSelectStock }: OverviewProps) {
         </section>
       )}
 
-      {/* Watchlist */}
       {watchlistStocks.length > 0 && (
         <section>
           <SectionHeader title="Watchlist" count={watchlistStocks.length} icon={<List size={20} />} />

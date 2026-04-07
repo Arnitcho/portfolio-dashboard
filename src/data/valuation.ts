@@ -213,8 +213,9 @@ export function getValuation(id: string, currentPrice: number): ValuationResult 
 // Upside color scale (per spec)
 // ──────────────────────────────────────────────────────────────
 export function getUpsideColorNew(pct: number): string {
-  if (pct > 30)  return '#22c55e'
-  if (pct > 10)  return '#86efac'
+  if (pct > 30)  return '#10b981'
+  if (pct > 10)  return '#34d399'
+  if (pct > 0)   return '#6ee7b7'
   if (pct > -10) return '#fbbf24'
   if (pct > -25) return '#f97316'
   return '#ef4444'

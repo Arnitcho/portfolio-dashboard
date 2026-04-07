@@ -15,7 +15,7 @@ interface StockDetailProps {
   stockId: string
 }
 
-const GOLD = '#f0b429'
+const GOLD = '#e8a020'
 
 function Panel({ title, children, fullWidth = false }: { title: string; children: React.ReactNode; fullWidth?: boolean }) {
   return (
@@ -23,12 +23,12 @@ function Panel({ title, children, fullWidth = false }: { title: string; children
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
         <h3 style={{
           fontFamily: 'Cormorant Garamond, serif', fontSize: '20px', fontWeight: 400, letterSpacing: '0.03em', lineHeight: 1,
-          background: `linear-gradient(90deg, #e8eaf0, #8892a4)`,
+          background: `linear-gradient(90deg, #f0ead6, #b0a88a)`,
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
         }}>
           {title}
         </h3>
-        <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, rgba(240,180,41,0.2), transparent)' }} />
+        <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, rgba(232,160,32,0.2), transparent)' }} />
       </div>
       {children}
     </div>
@@ -36,9 +36,9 @@ function Panel({ title, children, fullWidth = false }: { title: string; children
 }
 
 const verdictConfig = {
-  buy:       { label: 'ACHAT',        color: '#10b981', bg: 'rgba(16,185,129,0.12)',  border: 'rgba(16,185,129,0.3)' },
-  watch:     { label: 'SURVEILLANCE', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)',  border: 'rgba(245,158,11,0.3)' },
-  watchlist: { label: 'WATCHLIST',    color: '#818cf8', bg: 'rgba(99,102,241,0.12)',  border: 'rgba(99,102,241,0.3)' },
+  buy:       { label: 'ACHAT',        color: '#22c55e', bg: 'rgba(34,197,94,0.10)',   border: 'rgba(34,197,94,0.28)' },
+  watch:     { label: 'SURVEILLANCE', color: '#f59e0b', bg: 'rgba(245,158,11,0.10)',  border: 'rgba(245,158,11,0.28)' },
+  watchlist: { label: 'WATCHLIST',    color: '#a78bfa', bg: 'rgba(167,139,250,0.10)', border: 'rgba(167,139,250,0.28)' },
 }
 
 function ValuationMethodCard({ label, price, color, bg, border, note }: {
@@ -52,7 +52,7 @@ function ValuationMethodCard({ label, price, color, bg, border, note }: {
       <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '28px', fontWeight: 600, color, lineHeight: 1, marginBottom: '10px' }}>
         {price}
       </div>
-      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', color: '#4a5568', lineHeight: 1.6 }}>
+      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '11px', color: '#6b6352', lineHeight: 1.6 }}>
         {note}
       </p>
     </div>
@@ -87,8 +87,8 @@ function ValuationPanel({ stockId, currentPrice, currency }: { stockId: string; 
           label="MÉTHODE 2 — EV/MULTIPLE"
           price={fmt(val.multiple)}
           color={GOLD}
-          bg="rgba(240,180,41,0.06)"
-          border="rgba(240,180,41,0.18)"
+          bg="rgba(232,160,32,0.06)"
+          border="rgba(232,160,32,0.18)"
           note={`Moyenne EV/EBITDA ${val.input.evEbitdaSector ?? '—'}× et EV/FCF ${val.input.evFcfSector ?? '—'}× secteur`}
         />
         <ValuationMethodCard
@@ -105,24 +105,24 @@ function ValuationPanel({ stockId, currentPrice, currency }: { stockId: string; 
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         background: `${upsideColor}0a`, border: `1px solid ${upsideColor}25`,
-        borderRadius: '12px', padding: '20px 28px', marginBottom: '24px',
+        borderRadius: '12px', padding: '24px 32px', marginBottom: '24px',
       }}>
         <div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.12em', marginBottom: '6px' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#6b6352', letterSpacing: '0.12em', marginBottom: '8px' }}>
             JUSTE VALEUR (MOYENNE 3 MÉTHODES)
           </div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '40px', fontWeight: 600, color: '#e8eaf0', lineHeight: 1 }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '2.5rem', fontWeight: 600, color: '#f0ead6', lineHeight: 1 }}>
             {fmt(val.fairValue)}
           </div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.12em', marginBottom: '6px' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#6b6352', letterSpacing: '0.12em', marginBottom: '8px' }}>
             UPSIDE vs PRIX ACTUEL
           </div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '48px', fontWeight: 700, color: upsideColor, lineHeight: 1, letterSpacing: '-0.02em' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '3.5rem', fontWeight: 700, color: upsideColor, lineHeight: 1, letterSpacing: '-0.02em' }}>
             {upside >= 0 ? '+' : ''}{upside.toFixed(1)}%
           </div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: upsideColor, opacity: 0.75, marginTop: '4px', letterSpacing: '0.1em' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: upsideColor, opacity: 0.75, marginTop: '6px', letterSpacing: '0.1em' }}>
             {label}
           </div>
         </div>
@@ -130,10 +130,10 @@ function ValuationPanel({ stockId, currentPrice, currency }: { stockId: string; 
 
       {/* Visual bar */}
       <div>
-        <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.1em', marginBottom: '10px' }}>
+        <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#6b6352', letterSpacing: '0.1em', marginBottom: '10px' }}>
           PRIX ACTUEL vs JUSTE VALEUR
         </div>
-        <div style={{ position: 'relative', height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '3px' }}>
+        <div style={{ position: 'relative', height: '6px', background: 'rgba(240,220,160,0.08)', borderRadius: '3px' }}>
           <div style={{
             position: 'absolute',
             left: `${Math.min(pricePct, targetPct)}%`,
@@ -143,7 +143,7 @@ function ValuationPanel({ stockId, currentPrice, currency }: { stockId: string; 
           <div style={{
             position: 'absolute', left: `${pricePct}%`, top: '-3px',
             width: '12px', height: '12px', borderRadius: '50%',
-            background: '#e8eaf0', border: '2px solid rgba(232,234,240,0.4)',
+            background: '#f0ead6', border: '2px solid rgba(240,234,214,0.4)',
             transform: 'translateX(-50%)',
           }} />
           <div style={{
@@ -154,7 +154,7 @@ function ValuationPanel({ stockId, currentPrice, currency }: { stockId: string; 
           }} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
-          <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: '#8892a4' }}>
+          <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: '#b0a88a' }}>
             ● Actuel: {fmt(currentPrice)}
           </span>
           <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: upsideColor }}>
@@ -171,7 +171,7 @@ export default function StockDetail({ stockId }: StockDetailProps) {
   const { prices } = usePrices()
 
   if (!stock) return (
-    <div style={{ padding: '80px', textAlign: 'center', color: '#4a5568', fontFamily: 'DM Mono, monospace', fontSize: '12px' }}>
+    <div style={{ padding: '80px', textAlign: 'center', color: '#6b6352', fontFamily: 'DM Mono, monospace', fontSize: '12px' }}>
       Stock non trouvé: {stockId}
     </div>
   )
@@ -188,30 +188,30 @@ export default function StockDetail({ stockId }: StockDetailProps) {
 
       {/* ── Hero ── */}
       <div className="card" style={{
-        padding: '40px 48px', marginBottom: '28px',
-        background: 'linear-gradient(135deg, #161b27 0%, #1a1f30 50%, #161b27 100%)',
+        padding: '44px 52px', marginBottom: '28px',
+        background: 'linear-gradient(135deg, #272420 0%, #2a2720 50%, #272420 100%)',
       }}>
         {/* Identity row */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '36px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <CompanyLogo ticker={stock.id} size={80} />
             <div>
               <div style={{
-                fontFamily: 'Cormorant Garamond, serif', fontSize: '52px', fontWeight: 600, lineHeight: 1,
-                background: `linear-gradient(90deg, ${GOLD}, #ffd166)`,
+                fontFamily: 'Cormorant Garamond, serif', fontSize: '52px', fontWeight: 700, lineHeight: 1,
+                background: `linear-gradient(90deg, ${GOLD}, #f5c842)`,
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               }}>
                 {stock.id}
               </div>
-              <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#8892a4', marginTop: '4px' }}>
+              <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '18px', color: '#b0a88a', marginTop: '4px' }}>
                 {stock.name}
               </div>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '8px' }}>
-                <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: '#4a5568', letterSpacing: '0.08em' }}>
+                <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: '#6b6352', letterSpacing: '0.08em' }}>
                   {stock.sector}
                 </span>
-                <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: 'rgba(240,180,41,0.3)', display: 'inline-block' }} />
-                <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: 'rgba(240,180,41,0.5)', letterSpacing: '0.08em' }}>
+                <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: 'rgba(232,160,32,0.3)', display: 'inline-block' }} />
+                <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: 'rgba(232,160,32,0.5)', letterSpacing: '0.08em' }}>
                   {stock.currency}
                 </span>
               </div>
@@ -225,38 +225,38 @@ export default function StockDetail({ stockId }: StockDetailProps) {
           </span>
         </div>
 
-        <div style={{ height: '1px', background: 'linear-gradient(90deg, rgba(240,180,41,0.2), transparent)', marginBottom: '32px' }} />
+        <div style={{ height: '1px', background: 'linear-gradient(90deg, rgba(232,160,32,0.2), transparent)', marginBottom: '36px' }} />
 
         {/* Price row */}
-        <div style={{ display: 'flex', gap: '48px', alignItems: 'flex-end' }}>
+        <div style={{ display: 'flex', gap: '56px', alignItems: 'flex-end' }}>
           <div>
-            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.12em', marginBottom: '6px' }}>
+            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#6b6352', letterSpacing: '0.12em', marginBottom: '8px' }}>
               PRIX RÉFÉRENCE
             </div>
-            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '64px', fontWeight: 300, color: GOLD, lineHeight: 1, letterSpacing: '-0.02em' }}>
+            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '5rem', fontWeight: 300, color: GOLD, lineHeight: 1, letterSpacing: '-0.02em' }}>
               {curr}{stock.currency === 'JPY' ? livePrice.toLocaleString() : livePrice.toFixed(2)}
             </div>
           </div>
-          <div style={{ width: '1px', height: '64px', background: 'rgba(255,255,255,0.06)' }} />
+          <div style={{ width: '1px', height: '80px', background: 'rgba(240,220,160,0.08)' }} />
           <div>
-            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.12em', marginBottom: '6px' }}>
+            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#6b6352', letterSpacing: '0.12em', marginBottom: '8px' }}>
               JUSTE VALEUR
             </div>
-            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '40px', fontWeight: 300, color: '#8892a4', lineHeight: 1 }}>
+            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '2.5rem', fontWeight: 300, color: '#b0a88a', lineHeight: 1 }}>
               {curr}{stock.currency === 'JPY' ? Math.round(val.fairValue).toLocaleString() : val.fairValue.toFixed(2)}
             </div>
           </div>
-          <div style={{ width: '1px', height: '64px', background: 'rgba(255,255,255,0.06)' }} />
+          <div style={{ width: '1px', height: '80px', background: 'rgba(240,220,160,0.08)' }} />
           <div>
-            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#4a5568', letterSpacing: '0.12em', marginBottom: '8px' }}>
+            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: '#6b6352', letterSpacing: '0.12em', marginBottom: '10px' }}>
               UPSIDE
             </div>
             <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '10px',
+              display: 'inline-flex', alignItems: 'center', gap: '12px',
               background: `${upsideColor}12`, border: `1px solid ${upsideColor}35`,
-              borderRadius: '999px', padding: '10px 24px',
+              borderRadius: '999px', padding: '12px 28px',
             }}>
-              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '32px', fontWeight: 700, color: upsideColor, lineHeight: 1, letterSpacing: '-0.01em' }}>
+              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '3.5rem', fontWeight: 700, color: upsideColor, lineHeight: 1, letterSpacing: '-0.02em' }}>
                 {upside >= 0 ? '+' : ''}{upside.toFixed(1)}%
               </span>
               <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '10px', color: upsideColor, opacity: 0.75, letterSpacing: '0.08em' }}>
@@ -270,11 +270,11 @@ export default function StockDetail({ stockId }: StockDetailProps) {
       {/* Sector note */}
       {stock.sectorAdaptation && (
         <div style={{
-          background: 'rgba(240,180,41,0.05)', border: '1px solid rgba(240,180,41,0.12)',
-          borderLeft: '3px solid rgba(240,180,41,0.4)', borderRadius: '0 10px 10px 0',
+          background: 'rgba(232,160,32,0.04)', border: '1px solid rgba(232,160,32,0.12)',
+          borderLeft: '3px solid rgba(232,160,32,0.4)', borderRadius: '0 10px 10px 0',
           padding: '12px 18px', marginBottom: '28px',
         }}>
-          <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,180,41,0.6)', letterSpacing: '0.08em' }}>
+          <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(232,160,32,0.6)', letterSpacing: '0.08em' }}>
             NOTE SECTORIELLE — {stock.sectorAdaptation}
           </span>
         </div>
@@ -302,13 +302,13 @@ export default function StockDetail({ stockId }: StockDetailProps) {
             {stock.thesis.map((point, i) => (
               <div key={i} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
                 <div style={{
-                  width: '22px', height: '22px', border: '1px solid rgba(240,180,41,0.2)',
+                  width: '22px', height: '22px', border: '1px solid rgba(232,160,32,0.2)',
                   borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0, marginTop: '1px', background: 'rgba(240,180,41,0.05)',
+                  flexShrink: 0, marginTop: '1px', background: 'rgba(232,160,32,0.05)',
                 }}>
-                  <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(240,180,41,0.6)' }}>{i + 1}</span>
+                  <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '9px', color: 'rgba(232,160,32,0.6)' }}>{i + 1}</span>
                 </div>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#8892a4', lineHeight: 1.8 }}
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '13px', color: '#b0a88a', lineHeight: 1.8 }}
                   dangerouslySetInnerHTML={{ __html: point }} />
               </div>
             ))}

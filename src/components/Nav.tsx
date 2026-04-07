@@ -5,7 +5,7 @@ interface NavProps {
   onBack?: () => void
 }
 
-const GOLD = '#f0b429'
+const GOLD = '#e8a020'
 
 export default function Nav({ view, onNavigate, stockId, onBack }: NavProps) {
   const tabs = [
@@ -15,12 +15,12 @@ export default function Nav({ view, onNavigate, stockId, onBack }: NavProps) {
 
   return (
     <header style={{
-      backgroundColor: '#0d1120',
+      backgroundColor: '#161410',
       position: 'sticky',
       top: 0,
       zIndex: 50,
       backdropFilter: 'blur(16px)',
-      borderBottom: '1px solid rgba(255,255,255,0.05)',
+      borderBottom: '1px solid rgba(240,220,160,0.08)',
     }}>
       {/* Thin gold accent at bottom */}
       <div style={{
@@ -45,7 +45,7 @@ export default function Nav({ view, onNavigate, stockId, onBack }: NavProps) {
               fontWeight: 600,
               letterSpacing: '0.06em',
               lineHeight: 1,
-              background: `linear-gradient(90deg, ${GOLD}, #ffd166)`,
+              background: `linear-gradient(90deg, ${GOLD}, #f5c842)`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -55,7 +55,7 @@ export default function Nav({ view, onNavigate, stockId, onBack }: NavProps) {
             <span style={{
               fontFamily: 'DM Mono, monospace',
               fontSize: '0.5rem',
-              color: 'rgba(240,180,41,0.35)',
+              color: 'rgba(232,160,32,0.35)',
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
               lineHeight: 1,
@@ -73,15 +73,15 @@ export default function Nav({ view, onNavigate, stockId, onBack }: NavProps) {
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
                   fontFamily: 'DM Mono, monospace', fontSize: '0.6875rem',
-                  color: '#4a5568', letterSpacing: '0.08em',
+                  color: '#6b6352', letterSpacing: '0.08em',
                   transition: 'color 0.2s', padding: 0,
                 }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#8892a4')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#4a5568')}
+                onMouseEnter={e => (e.currentTarget.style.color = '#b0a88a')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#6b6352')}
               >
                 Vue d'ensemble
               </button>
-              <span style={{ color: '#4a5568', fontSize: '0.75rem' }}>›</span>
+              <span style={{ color: '#6b6352', fontSize: '0.75rem' }}>›</span>
               <span style={{
                 fontFamily: 'DM Mono, monospace', fontSize: '0.6875rem',
                 fontWeight: 600, color: GOLD, letterSpacing: '0.1em',
@@ -102,7 +102,7 @@ export default function Nav({ view, onNavigate, stockId, onBack }: NavProps) {
                       background: 'none',
                       border: 'none',
                       borderBottom: active ? `2px solid ${GOLD}` : '2px solid transparent',
-                      color: active ? GOLD : '#4a5568',
+                      color: active ? GOLD : '#6b6352',
                       fontFamily: 'DM Sans, sans-serif',
                       fontSize: '0.8125rem',
                       fontWeight: active ? 600 : 400,
@@ -112,8 +112,8 @@ export default function Nav({ view, onNavigate, stockId, onBack }: NavProps) {
                       height: '100%',
                       transition: 'color 0.2s, border-color 0.2s',
                     }}
-                    onMouseEnter={e => { if (!active) e.currentTarget.style.color = '#8892a4' }}
-                    onMouseLeave={e => { if (!active) e.currentTarget.style.color = '#4a5568' }}
+                    onMouseEnter={e => { if (!active) e.currentTarget.style.color = '#b0a88a' }}
+                    onMouseLeave={e => { if (!active) e.currentTarget.style.color = '#6b6352' }}
                   >
                     {tab.label}
                   </button>
@@ -129,23 +129,23 @@ export default function Nav({ view, onNavigate, stockId, onBack }: NavProps) {
                 onClick={onBack}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '0.375rem',
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'rgba(240,220,160,0.04)',
+                  border: '1px solid rgba(240,220,160,0.08)',
                   borderRadius: '0.5rem',
-                  color: '#8892a4', fontFamily: 'DM Mono, monospace',
+                  color: '#b0a88a', fontFamily: 'DM Mono, monospace',
                   fontSize: '0.625rem', letterSpacing: '0.1em',
                   padding: '0.4rem 0.875rem', cursor: 'pointer',
                   transition: 'color 0.2s, border-color 0.2s',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.color = GOLD; e.currentTarget.style.borderColor = 'rgba(240,180,41,0.3)' }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#8892a4'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
+                onMouseEnter={e => { e.currentTarget.style.color = GOLD; e.currentTarget.style.borderColor = 'rgba(232,160,32,0.3)' }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#b0a88a'; e.currentTarget.style.borderColor = 'rgba(240,220,160,0.08)' }}
               >
                 ← RETOUR
               </button>
             )}
             <time
               dateTime={new Date().toISOString().slice(0, 10)}
-              style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.625rem', color: '#4a5568', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}
+              style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.625rem', color: '#6b6352', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}
             >
               {new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })}
             </time>

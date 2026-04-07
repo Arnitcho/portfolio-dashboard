@@ -64,7 +64,7 @@ function TargetPill({ label, value, color }: { label: string; value: string; col
       }}>
         {label}
       </span>
-      <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.75rem', fontWeight: 600, color }}>
+      <span style={{ fontFamily: 'DM Mono, monospace', fontSize: '1rem', fontWeight: 600, color }}>
         {value}
       </span>
     </div>
@@ -137,7 +137,7 @@ function StockCard({ stock, livePrice, onSelect }: { stock: Stock; livePrice: nu
           <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.5rem', color: '#4a5568', letterSpacing: '0.12em', marginBottom: '0.25rem' }}>
             JUSTE VALEUR
           </div>
-          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '1rem', fontWeight: 600, color: '#e8eaf0' }}>
+          <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '1.5rem', fontWeight: 600, color: '#e8eaf0' }}>
             {fmt(val.fairValue)}
           </div>
         </div>
@@ -165,13 +165,13 @@ function StockCard({ stock, livePrice, onSelect }: { stock: Stock; livePrice: nu
         <div style={{ display: 'flex', gap: '1.25rem' }}>
           <div>
             <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.5rem', color: '#4a5568', letterSpacing: '0.1em', marginBottom: '0.125rem' }}>PRIX</div>
-            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.6875rem', color: '#8892a4' }}>
+            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '1rem', color: '#8892a4' }}>
               {curr}{stock.currency === 'JPY' ? livePrice.toLocaleString() : livePrice.toFixed(2)}
             </div>
           </div>
           <div>
             <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.5rem', color: '#4a5568', letterSpacing: '0.1em', marginBottom: '0.125rem' }}>ENTRÉE</div>
-            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '0.6875rem', color: '#8892a4' }}>{stock.entryZone}</div>
+            <div style={{ fontFamily: 'DM Mono, monospace', fontSize: '1rem', color: '#8892a4' }}>{stock.entryZone}</div>
           </div>
         </div>
         <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
@@ -316,7 +316,7 @@ export default function Overview({ onSelectStock }: OverviewProps) {
         display: 'flex',
         alignItems: 'stretch',
         gap: 0,
-        background: 'linear-gradient(135deg, #161b27, #1a1f32)',
+        background: 'linear-gradient(135deg, #1a2540, #1e2d4d)',
       }}>
         <HealthMetric
           label="UPSIDE MOYEN — PORTEFEUILLE"

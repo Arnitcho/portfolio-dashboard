@@ -5,16 +5,16 @@ html { font-size: 16px; }
 
 :root {
   /* ── Backgrounds ── */
-  --bg:            #0f1117;
-  --bg-nav:        #0d1120;
-  --bg-card:       #161b27;
-  --bg-card-hover: #1c2333;
-  --bg-elevated:   #1e2540;
+  --bg:            #131c2e;
+  --bg-nav:        #0f1628;
+  --bg-card:       #1a2540;
+  --bg-card-hover: #202d4a;
+  --bg-elevated:   #243356;
 
   /* ── Text ── */
-  --text-primary:   #e8eaf0;
-  --text-secondary: #8892a4;
-  --text-tertiary:  #4a5568;
+  --text-primary:   #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary:  #64748b;
 
   /* ── Gold ── */
   --gold:        #f0b429;
@@ -23,7 +23,7 @@ html { font-size: 16px; }
   --gold-border: rgba(240,180,41,0.25);
 
   /* ── Borders ── */
-  --border:        rgba(255,255,255,0.06);
+  --border:        rgba(255,255,255,0.10);
   --border-hover:  rgba(240,180,41,0.35);
   --border-active: #f0b429;
 
